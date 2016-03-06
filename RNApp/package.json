@@ -10,6 +10,7 @@
     "ddp-client": "spencercarli/node-ddp-client",
     "ejson": "^2.1.2",
     "lodash": "^4.5.0",
-    "react-native": "^0.20.0"
+    "react-native": "^0.21.0",
+    "react-native-google-signin": "^0.4.3"
   }
 }
