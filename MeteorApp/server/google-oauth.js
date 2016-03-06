@@ -8,6 +8,7 @@ if (settings) {
   ServiceConfiguration.configurations.insert({
     service: 'google',
     clientId: settings.clientId,
-    secret: settings.secret
+    secret: settings.secret,
+    validClientIds: Meteor.settings.google.validClientIds
   });
 }

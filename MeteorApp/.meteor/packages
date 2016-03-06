@@ -20,3 +20,4 @@ accounts-password
 accounts-google
 service-configuration
 accounts-ui
+spencercarli:accounts-google-oauth
