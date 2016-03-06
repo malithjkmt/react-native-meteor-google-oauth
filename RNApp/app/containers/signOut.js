@@ -31,13 +31,11 @@ export default class SignOut extends Component {
   }
 
   handleSignOut() {
-    // ddpClient.logout(() => {
-    //   this.props.changedSignedIn(false);
-    // });
     GoogleSignin.signOut()
     .then(() => {
-      console.log('google sign out');
-      this.props.changedSignedIn(false);
+      ddpClient.logout(() => {
+        this.props.changedSignedIn(false);
+      });
     })
     .catch((err) => {
       console.log('google sign out error', err);

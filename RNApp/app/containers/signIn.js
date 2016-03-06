@@ -20,16 +20,24 @@ export default class SignIn extends Component {
 
   handleDDPSignIn(googleUser) {
     if (googleUser) {
-      this.props.changedSignedIn(true);
+      ddpClient.loginWithGoogle(googleUser, (err, res) => {
+        if (err) {
+          this.setState({error: err.reason});
+        } else {
+          this.props.changedSignedIn(true);
+        }
+      });
     }
   }
 
-  componentDidMount() {
-    GoogleSignin.currentUserAsync()
-    .then((user) => {
-      this.handleDDPSignIn(user)
-    })
-    .done();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps) {
+      GoogleSignin.currentUserAsync()
+      .then((user) => {
+        this.handleDDPSignIn(user)
+      })
+      .done();
+    }
   }
 
   handleGoogleSignIn() {

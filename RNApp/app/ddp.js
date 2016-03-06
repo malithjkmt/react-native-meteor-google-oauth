@@ -94,6 +94,15 @@ ddpClient.loginWithUsername = (username, password, cb) => {
   })
 }
 
+ddpClient.loginWithGoogle = (user, cb) => {
+  let params = { google: user };
+
+  return ddpClient.call("login", [params], (err, res) => {
+    ddpClient.onAuthResponse(err, res);
+    cb && cb(err, res)
+  })
+}
+
 ddpClient.onAuthResponse = (err, res) => {
   if (res) {
     let { id, token, tokenExpires } = res;
