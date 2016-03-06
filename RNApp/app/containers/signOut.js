@@ -7,6 +7,7 @@ import React, {
 
 import Button from '../components/button';
 import ddpClient from '../ddp';
+import { GoogleSignin } from 'react-native-google-signin';
 
 export default class SignOut extends Component {
   constructor(props) {
@@ -30,8 +31,16 @@ export default class SignOut extends Component {
   }
 
   handleSignOut() {
-    ddpClient.logout(() => {
+    // ddpClient.logout(() => {
+    //   this.props.changedSignedIn(false);
+    // });
+    GoogleSignin.signOut()
+    .then(() => {
+      console.log('google sign out');
       this.props.changedSignedIn(false);
+    })
+    .catch((err) => {
+      console.log('google sign out error', err);
     });
   }
 

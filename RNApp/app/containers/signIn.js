@@ -2,67 +2,52 @@ import React, {
   Component,
   StyleSheet,
   Text,
-  View,
-  TextInput
+  View
 } from 'react-native';
 
 import Button from '../components/button';
 import ddpClient from '../ddp';
+import { GoogleSignin } from 'react-native-google-signin';
 
 export default class SignIn extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
       error: null
     }
   }
 
-  validInput() {
-    let { email, password } = this.state;
-    let valid = false;
-    if (email.length && password.length) {
-      this.setState({error: null});
-      valid = true;
-    } else {
-      this.setState({error: 'Email and password cannot be empty.'});
-    }
-
-    return valid;
-  }
-
-  handleSignIn() {
-    if (this.validInput()) {
-      ddpClient.loginWithEmail(this.state.email, this.state.password, (error, res) => {
-        if (error) {
-          this.setState({error: error.reason})
-        } else {
-          this.props.changedSignedIn(true);
-        }
-      });
+  handleDDPSignIn(googleUser) {
+    if (googleUser) {
+      this.props.changedSignedIn(true);
     }
   }
 
-  handleCreateAccount() {
-    if (this.validInput()) {
-      ddpClient.signUpWithEmail(this.state.email, this.state.password, (error, res) => {
-        if (error) {
-          this.setState({error: error.reason})
-        } else {
-          this.props.changedSignedIn(true);
-        }
-      });
-    }
+  componentDidMount() {
+    GoogleSignin.currentUserAsync()
+    .then((user) => {
+      this.handleDDPSignIn(user)
+    })
+    .done();
+  }
+
+  handleGoogleSignIn() {
+    GoogleSignin.signIn()
+    .then((user) => {
+      this.handleDDPSignIn(user)
+    })
+    .catch((err) => {
+      this.setState({error: err.message});
+    })
+    .done();
   }
 
   render() {
-    let signIn, createAccount;
+    let button;
 
     if (this.props.connected) {
-      signIn = <Button text="Sign In" onPress={() => this.handleSignIn()} />;
-      createAccount = <Button text="Create Account" onPress={() => this.handleCreateAccount()} />;
+      button = <Button text="Sign In with Google" onPress={this.handleGoogleSignIn.bind(this)}/>;
     }
 
     return (
@@ -71,28 +56,8 @@ export default class SignIn extends Component {
           Sign In Screen
         </Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(email) => this.setState({email})}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(password) => this.setState({password})}
-          secureTextEntry={true}
-        />
-
         <Text style={styles.error}>{this.state.error}</Text>
-
-        <View style={styles.buttons}>
-          {signIn}
-          {createAccount}
-        </View>
+        {button}
       </View>
     );
   }

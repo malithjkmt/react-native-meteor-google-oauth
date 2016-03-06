@@ -19,6 +19,9 @@ let opts = {
   // codePushDeploymentKey: '',
   ddpConfig: {
     maintainCollections : true,
+  },
+  google: {
+    iosClientId: '912978400401-v65hcpp583uhbf0lj827mvf7abit1qch.apps.googleusercontent.com'
   }
 }
 

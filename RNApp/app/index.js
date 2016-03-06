@@ -5,6 +5,9 @@ import SignOut from './containers/signOut';
 
 import ddpClient from './ddp';
 
+import config from './config';
+import { GoogleSignin } from 'react-native-google-signin';
+
 export default class RNApp extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +19,10 @@ export default class RNApp extends Component {
   }
 
   componentWillMount() {
+    GoogleSignin.configure({
+      iosClientId: config.google.iosClientId, // only for iOS
+    });
+
     ddpClient.connect((error, wasReconnect) => {
       if (error) {
         this.setState({connected: false});
